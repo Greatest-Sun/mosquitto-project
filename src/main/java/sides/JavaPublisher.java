@@ -11,7 +11,7 @@ public class JavaPublisher {
         String content;
         String topic        = "devices/sensor/temperature";
         int qos             = 1;
-        String broker       = "tcp://mqtt.eclipse.org:1883";
+        String broker       = "tcp://192.168.100.35:1883";
         String clientId     = "JavaSample";
         MemoryPersistence persistence = new MemoryPersistence();
         try {
@@ -19,15 +19,14 @@ public class JavaPublisher {
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
             System.out.println("Connecting to broker: "+ broker + "\n");
+            sampleClient.connect(connOpts);
             while(true) {
-                sampleClient.connect(connOpts);
                 content = Integer.toString(getRNB(15, 45));
                 System.out.println("Publishing message: " + content + "º");
                 MqttMessage message = new MqttMessage(content.getBytes());
                 message.setQos(qos);
                 sampleClient.publish(topic, message);
                 System.out.println("Message published\n");
-                sampleClient.disconnect();
                 Thread.sleep(1000);
             }
         } catch(MqttException me) {
